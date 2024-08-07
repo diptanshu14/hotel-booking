@@ -4,7 +4,7 @@ import User from "../models/user.model"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
-export const login = async (req: Request, res:Response) => {
+export const login = async (req: Request, res: Response) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.status(400).json({ message: errors.array() })
@@ -38,4 +38,8 @@ export const login = async (req: Request, res:Response) => {
         console.log(error)
         return res.status(500).json({ message: "Internal Server Error" })
     }
+}
+
+export const validateToken = async (req:Request, res:Response) => {
+    res.status(200).send({ userId: req.userId })
 }
