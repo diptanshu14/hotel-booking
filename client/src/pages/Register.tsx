@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form"
-import { useMutation } from "react-query"
+import { useMutation, useQueryClient } from "react-query"
 import * as apiClient from '../api-client'
 import { useAppContext } from "../contexts/AppContext"
 import { useNavigate } from "react-router-dom"
@@ -13,14 +13,16 @@ export type RegisterFormData = {
 }
 
 const Register = () => {
+  const queryClient = useQueryClient()
   const navigate = useNavigate()
   const { showToast } = useAppContext()
 
   const { register, watch, handleSubmit, formState: {errors} } = useForm<RegisterFormData>()
 
   const mutation = useMutation(apiClient.register, {
-    onSuccess: () => {
+    onSuccess: async () => {
       showToast({ message: "Registration Successful!!", type: "SUCCESS" })
+      await queryClient.invalidateQueries("validateToken")
       navigate("/")
     },
     onError: (error: Error) => {
@@ -38,7 +40,7 @@ const Register = () => {
       <div className="flex flex-col md:flex-row gap-5">
         <label className="text-gray-700 text-sm font-bold flex-1">
           First Name
-          <input 
+          <input placeholder="Enter your first name"
             className="border rounded w-full py-1 px-2 font-normal" 
             {...register("firstName", { required: "This field is required" })}
           />
@@ -48,7 +50,7 @@ const Register = () => {
         </label>
         <label className="text-gray-700 text-sm font-bold flex-1">
           Last Name
-          <input 
+          <input placeholder="Enter your last name"
             className="border rounded w-full py-1 px-2 font-normal"
             {...register("lastName", { required: "This field is required" })} 
           />
@@ -59,7 +61,7 @@ const Register = () => {
       </div>
       <label className="text-gray-700 text-sm font-bold flex-1">
         Email
-        <input type="email"
+        <input type="email" placeholder="example@email.com"
           className="border rounded w-full py-1 px-2 font-normal"
           {...register("email", { required: "This field is required" })} 
         />
@@ -69,7 +71,7 @@ const Register = () => {
       </label>
       <label className="text-gray-700 text-sm font-bold flex-1">
         Password
-        <input type="password"
+        <input type="password" placeholder="password"
           className="border rounded w-full py-1 px-2 font-normal"
           {...register("password", { 
             required: "This field is required",
@@ -85,7 +87,7 @@ const Register = () => {
       </label>
       <label className="text-gray-700 text-sm font-bold flex-1">
         Confrim Password
-        <input type="password"
+        <input type="password" placeholder="confirm password"
           className="border rounded w-full py-1 px-2 font-normal"
           {...register("confirmPassword", {
             validate: (val) => {
