@@ -56,6 +56,14 @@ export const login = async (req: Request, res: Response) => {
 }
 
 
+export const logout = async (req: Request, res: Response) => {
+    res.cookie("token", "", {
+        expires: new Date(0),
+    })
+    res.send()
+}
+
+
 export const validateToken = async (req: Request, res: Response) => {
     res.status(200).send({ userId: req.userId })
 }

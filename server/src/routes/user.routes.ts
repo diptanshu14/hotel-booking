@@ -1,5 +1,5 @@
 import express from "express"
-import { login, register, validateToken } from "../controllers/user.controller"
+import { login, logout, register, validateToken } from "../controllers/user.controller"
 import { check } from "express-validator"
 import verifyToken from "../middlewares/auth"
 
@@ -18,5 +18,7 @@ router.post("/login", [
 ], login)
 
 router.get("/validate-token", verifyToken, validateToken)
+
+router.post("/logout", logout)
 
 export default router
