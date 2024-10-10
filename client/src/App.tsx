@@ -1,8 +1,15 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
+import Layout from "./layouts/Layout"
+
 const App = () => {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout>Home</Layout>} />
+        <Route path="/search" element={<Layout>Search</Layout>} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
   )
 }
 
