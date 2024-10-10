@@ -16,7 +16,7 @@ export const register = async (req: Request, res: Response) => {
         if (result.token) {
             res.cookie("token", result.token, {
                 httpOnly: true, 
-                sameSite: 'strict',
+                secure: process.env.NODE_ENV === "production",
                 maxAge: 86400000
             })
         }
@@ -43,7 +43,7 @@ export const login = async (req: Request, res: Response) => {
         if (result.token) {
             res.cookie("token", result.token, {
                 httpOnly: true, 
-                sameSite: 'strict',
+                secure: process.env.NODE_ENV === "production",
                 maxAge: 86400000
             })
         }
@@ -53,4 +53,9 @@ export const login = async (req: Request, res: Response) => {
         console.log("Error in login controller: ", error)
         res.status(500).json({ message: "Internal Server Error" })
     }
+}
+
+
+export const validateToken = async (req: Request, res: Response) => {
+    res.status(200).send({ userId: req.userId })
 }
